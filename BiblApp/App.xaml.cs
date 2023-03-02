@@ -10,7 +10,9 @@ namespace BiblApp
         {
             InitializeComponent();
 
-            MainPage = new RegPage();
+         //   MainPage = new RegPage();
+            MainPage = new NavigationPage(new RegPage());
+
         }
 
         protected override void OnStart()

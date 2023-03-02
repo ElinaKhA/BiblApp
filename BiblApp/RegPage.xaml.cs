@@ -8,34 +8,42 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using NavigationPage = Xamarin.Forms.NavigationPage;
 
 namespace BiblApp
 {
     public partial class RegPage : ContentPage
     {
-        bool loaded = false;
-        Label stackLabel;
+         bool loaded = false;
         public RegPage()
         {
             InitializeComponent();
-            stackLabel = new Label();
-            Content = new StackLayout { Children = { stackLabel } };
-
-
         }
-        protected internal void DisplayStack()
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (loaded == false)
+            {
+                DisplayStack();
+                loaded = true;
+            }
+        } 
+
+       protected internal void DisplayStack()
         {
             NavigationPage navPage = (NavigationPage)App.Current.MainPage;
             stackLabel.Text = "";
-            foreach (Page p in navPage.Navigation.NavigationStack)
+            foreach (Xamarin.Forms.Page p in navPage.Navigation.NavigationStack)
             {
                 stackLabel.Text += p.Title + "\n";
             }
-        }
+        } 
         void rolePicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+           
         }
+
         private async void OnButtonClicked(object sender, System.EventArgs e)
         {
             Button button = (Button)sender;
@@ -65,13 +73,33 @@ namespace BiblApp
             }
             else
             {
-                DisplayAlert("Успешно", "Вы зарегистрировались", "Ок");
-               
-                KabinetPage page = new KabinetPage();
-                await Navigation.PushAsync(page);
-                page.DisplayStack();
+                if (role.SelectedIndex==0)
+                {
+                    DisplayAlert("Успешно", "Вы зарегистрировались как клиент", "Ок");
+
+                    KabinetPage page = new KabinetPage();
+                    await Navigation.PushAsync(page);
+                    page.DisplayStack();
+                }
+                else if (role.SelectedIndex == 1)
+                {
+                    DisplayAlert("Успешно", "Вы зарегистрировались как библиотекарь", "Ок");
+
+                    KabinetPage page = new KabinetPage();
+                    await Navigation.PushAsync(page);
+                    page.DisplayStack();
+                }
+                else if (role.SelectedIndex == 2)
+                {
+                    DisplayAlert("Успешно", "Вы зарегистрировались как администратор", "Ок");
+
+                    AdminPage page = new AdminPage();
+                    await Navigation.PushAsync(page);
+                    page.DisplayStack();
+                }
 
             }
+        
         }
         
 
